@@ -14,6 +14,6 @@ public class test_samba {
 
 
 
-//ajouter contact
-//lister contact
+//a pour ajouter un contact
+//z pour lister les contact
 //q pour quitter l'appli 
