@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class test_samba {
+public class test_timeo {
     private static Scanner _scan = new Scanner (System.in);
     public static void main(String[] args) throws Exception {
         while (true){
