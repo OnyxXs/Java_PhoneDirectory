@@ -12,15 +12,9 @@ import model.Contact;
 
 public class App {
 
- 
-
     private static Scanner _scan = new Scanner(System.in);
 
- 
-
     public static void main(String[] args) throws Exception {
-
- 
 
         while (true) {
 
@@ -56,8 +50,6 @@ public class App {
 
     }
 
- 
-
     private static void ajouterContact() {
 
         Contact c = new Contact();
@@ -66,26 +58,22 @@ public class App {
 
         c.setNom(_scan.nextLine());
 
- 
 
         System.out.println("Saisir le prénom");
 
         c.setPrenom(_scan.nextLine());
 
  
-
         System.out.println("Saisir le mail");
 
         c.setMail(_scan.nextLine());
 
- 
 
         System.out.println("Saisir le téléphone");
 
         c.setTelephone(_scan.nextLine());
 
  
-
         while (true) {
 
             try {
