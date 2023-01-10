@@ -19,7 +19,7 @@ public class test_samba {
             System.out.println("réessayer avec une bonne touche");
             break;
         }
-    }
+        }
     } 
     
     public static void menu(){
