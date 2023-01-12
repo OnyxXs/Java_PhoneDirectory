@@ -2,9 +2,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.io.FileReader;
-import java.io.BufferedReader;
 import java.util.Collections;
+import java.util.Comparator;
 
 import model.*;
 
@@ -21,33 +20,60 @@ public class App {
             String choix = scanner.nextLine();
             switch (choix) {
                 case "1":
-                    System.out.println("---- Créer contact ----");
+                    System.out.println("---- " + "\033[34mCréer contact \033[0m" + "----");
                     add_contact();
                     break;
                 case "2":
-                    System.out.println("-------- Liste --------");
+                    System.out.println("-------- " + "\033[34mListe \033[0m" + "--------");
                     listerContacts();
                     break;
                 case "3":
-                    System.out.println("--- Modifier contact --");
+                    System.out.println("--- " + "\033[34mModifier contact \033[0m" + "--");
                     update_contact();
                     break;
                 case "4":
-                    System.out.println("-- Supprimer contact --");
+                    System.out.println("-- " + "\033[34mSupprimer contact \033[0m" + "--");
                     supp_contact();
                     break;
                 case "5":
-                    System.out.println("-- Recherche contact --");
+                    System.out.println("-- " + "\033[34mRecherche contact \033[0m" + "--");
+                    System.out.println("Recherche par prénom");
                     rechercherParPrenom();
                     break;
-//              case "6":
-//                  System.out.println("-- afficher les contacts par ordre alphabétique --");
-//                  afficherMenuNP();
-//                  break;
+                case "6":
+                    tri_contact();
+                    System.out.print("redirection vers : ");
+                    String tri = scanner.nextLine();
+                    switch (tri) {
+                        case "1":
+                            System.out.println();
+                            System.out.println("\033[34mLISTE PAR NOM\033[0m");
+                            System.out.println();
+                            tri_Nom();
+                            break;
+                        case "2":
+                            System.out.println();
+                            System.out.println("\033[34mLISTE PAR MAIL\033[0m");
+                            System.out.println();
+                            tri_Mail();
+                            break;
+                        case "3":
+                            System.out.println();
+                            System.out.println("\033[34mLISTE PAR DATE DE NAISSANCE\033[0m");
+                            System.out.println();
+                            tri_Date();
+                            break;
+                        case "q":
+                            break;
+                        default:
+                            System.out.println("\033[31mChoisissez une option\033[0m");
+                            break;
+                    }
+                    break;
                 case "q":
                     return;
                 default:
-                    System.out.println("Choisissez une option");
+                    System.out.println("\033[31mChoisissez une option\033[0m");
                     break;
             }
         }
@@ -55,54 +81,52 @@ public class App {
 
     public static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
-        menus.add("-------- Menu ---------");
+        menus.add("-------- " + "\033[34mMenu \033[0m" + "---------");
         menus.add("1- Ajouter un contact");
         menus.add("2- Liste des contacts");
         menus.add("3- Modifier un contact");
         menus.add("4- Supprimer un contact");
         menus.add("5- Rechercher un contact");
+        menus.add("6- Trier les contacts");
         menus.add("q- Quitter");
         for (String menu : menus) {
             System.out.println(menu);
         }
     }
 
+    public static void tri_contact() {
+        ArrayList<String> tri = new ArrayList<>();
+        System.out.println("---- " + "\033[34mTrier contact \033[0m" + "----");
+        System.out.println("differents types de tri");
+        System.out.println("1- Tri par nom");
+        System.out.println("2- Tri par mail");
+        System.out.println("3- Tri par date de naissance");
+        System.out.println("q- Quitter");
+        for (String tri_3 : tri) {
+            System.out.println(tri_3);
+        }
+    }
+
     private static void rechercherParPrenom() {
-        System.out.println("Recherche par prénom");
         System.out.print("Prénom : ");
         String prenomRecherche = scanner.nextLine();
         try {
             ArrayList<Contact> list = Contact.lister();
-            ArrayList<Contact> resultatRecherche = new ArrayList<>();
-            for (Contact contact : list) {
-                if (contact.getPrenom().equalsIgnoreCase(prenomRecherche)) {
-                    resultatRecherche.add(contact);
-                }
-            }
-            if (resultatRecherche.isEmpty()) {
-                System.out.println("Il n'y a pas de contact avec se prénom");
-                System.out.println("1- Rechercher un contact");
-                System.out.println("q- Quitter");
-                System.out.print("redirection vers : ");
-                String recherche = scanner.nextLine();
-                switch (recherche) {
-                    case "1":
-                        rechercherParPrenom();
-                        break;
-                    case "q":
-                        break;
-                }
-            } else {
-                for (Contact contact : resultatRecherche) {
-                    System.out.println();
-                    System.out.println("CONTACT RECHERCHER");
-                    System.out.println();
-                    System.out.println("Nom : " + contact.getNom());
-                    System.out.println("Prénom : " + contact.getPrenom());
-                    System.out.println("Mail : " + contact.getMail());
-                    System.out.println("Téléphone : " + contact.getTelephone());
-                    System.out.println("Date de naissance : " + contact.getDateNaissance());
-                }
+            long nbResultat = list.stream()
+                    .filter(c -> c.getPrenom().toLowerCase().startsWith(prenomRecherche))
+                    .peek(c -> {
+                        System.out.println();
+                        System.out.println("\033[34mCONTACT RECHERCHER\033[0m");
+                        System.out.println();
+                        System.out.println("Nom : " + c.getNom());
+                        System.out.println("Prénom : " + c.getPrenom());
+                        System.out.println("Mail : " + c.getMail());
+                        System.out.println("Téléphone : " + c.getTelephone());
+                        System.out.println("Date de naissance : " + c.getDateNaissance());
+                    })
+                    .count();
+            if (nbResultat == 0) {
+                System.out.println("\033[31mAucun contact ne commence par : \033[0m" + prenomRecherche);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -129,7 +153,7 @@ public class App {
         System.out.print("Saisir le nom : ");
         String nom = scanner.nextLine();
         while (nom.isBlank()) {
-            System.out.println("Le nom est obligatoire");
+            System.out.println("\033[31mLe nom est obligatoire\033[0m");
             System.out.println();
             System.out.print("Saisir le nom : ");
             nom = scanner.nextLine();
@@ -139,7 +163,7 @@ public class App {
         System.out.print("Saisir le prénom : ");
         String prenom = scanner.nextLine();
         while (prenom.isBlank()) {
-            System.out.println("Le prénom est obligatoire");
+            System.out.println("\033[31mLe prénom est obligatoire\033[0m");
             System.out.println();
             System.out.print("Saisir le prénom : ");
             prenom = scanner.nextLine();
@@ -149,7 +173,7 @@ public class App {
         System.out.print("Saisir le mail : ");
         String email = scanner.nextLine();
         while (!isValidEmail(email)) {
-            System.out.println("Mail non valide");
+            System.out.println("\033[31mMail non valide\033[0m");
             System.out.println();
             System.out.print("Saisir le mail : ");
             email = scanner.nextLine();
@@ -159,7 +183,7 @@ public class App {
         System.out.print("Saisir le téléphone : ");
         String phone = scanner.nextLine();
         while (!isValidPhone(phone)) {
-            System.out.println("Numéro de téléphone non valide");
+            System.out.println("\033[31mNuméro de téléphone non valide\033[0m");
             System.out.println();
             System.out.print("Saisir le téléphone : ");
             phone = scanner.nextLine();
@@ -169,7 +193,7 @@ public class App {
         System.out.print("Saisir la date de naissance : ");
         String date = scanner.nextLine();
         while (!isValidDate(date)) {
-            System.out.println("Date de naissance non valide");
+            System.out.println("\033[31mDate de naissance non valide\033[0m");
             System.out.println();
             System.out.print("Saisir la date de naissance : ");
             date = scanner.nextLine();
@@ -177,7 +201,7 @@ public class App {
         c.setDateNaissance(date);
 
         c.enregistrer();
-        System.out.println("Contact enregistré");
+        System.out.println("\033[32mContact enregistré\033[0m");
     }
 
     public static boolean isValidEmail(String email) {
@@ -215,7 +239,7 @@ public class App {
         try {
             ArrayList<Contact> list = Contact.lister();
             if (list.isEmpty()) {
-                System.out.println("Aucun contact enregistré");
+                System.out.println("\033[31mAucun contact enregistré\033[0m");
                 return;
             }
             System.out.println("Choisir un contact à modifier");
@@ -254,7 +278,7 @@ public class App {
                     c.getMail();
                     break;
                 } else {
-                    System.out.println("Mail non valide");
+                    System.out.println("\033[31mMail non valide\033[0m");
                     System.out.println();
                 }
             }
@@ -270,7 +294,7 @@ public class App {
                     c.getTelephone();
                     break;
                 } else {
-                    System.out.println("Numéro de téléphone non valide");
+                    System.out.println("\033[31mNuméro de téléphone non valide\033[0m");
                     System.out.println();
                 }
             }
@@ -286,7 +310,7 @@ public class App {
                     c.getDateNaissance();
                     break;
                 } else {
-                    System.out.println("Date de naissance non valide");
+                    System.out.println("\033[31mDate de naissance non valide\033[0m");
                     System.out.println();
                 }
             }
@@ -294,7 +318,7 @@ public class App {
             c.enregistrer();
             System.out.println("Contact mis à jour");
         } catch (Exception e) {
-            System.out.println("Pas de contact modifier");
+            System.out.println("\033[31mPas de contact modifié\033[0m");
         }
     }
 
@@ -302,7 +326,7 @@ public class App {
         try {
             ArrayList<Contact> list = Contact.lister();
             if (list.isEmpty()) {
-                System.out.println("Aucun contact enregistré");
+                System.out.println("\033[31mAucun contact enregistré\033[0m");
                 return;
             }
             System.out.println("Choisir un contact à supprimer");
@@ -318,28 +342,106 @@ public class App {
             Contact c = list.get(choix - 1);
 
             c.supprimer();
-            System.out.println("Contact supprimé");
+            System.out.println("\033[32mContact supprimé\033[0m");
         } catch (Exception e) {
-            System.out.println("Pas de contact supprimer");
+            System.out.println("\033[31mPas de contact supprimé\033[0m");
         }
     }
-    public static void afficherMenuNP(String[] args) {
-        ArrayList<String> contacts = new ArrayList<>();
-    
-        try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                contacts.add(line);
+
+    private static void tri_Nom() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getNom().toLowerCase().compareTo(c2.getNom().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(i + ": " + contact.getNom() + " " + contact.getPrenom());
+                i++;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-    
-        Collections.sort(contacts);
-    
-        for (String contact : contacts) {
-            System.out.println(contact);
+    }
+
+    private static void tri_Mail() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getMail().toLowerCase().compareTo(c2.getMail().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(i + ": " + contact.getMail());
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+    }
+
+    private static void tri_Date() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getDateNaissance().compareTo(c2.getDateNaissance().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(
+                        i + ": " + contact.getDateNaissance() + " " + contact.getNom() + " " + contact.getPrenom());
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-    
+    }
+
+    public class Compare {
+        public static ArrayList<Contact> triParNom(ArrayList<Contact> list) {
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getNom().toLowerCase().compareTo(c2.getNom().toLowerCase());
+                }
+            });
+            return list;
+        }
+
+        public static ArrayList<Contact> triParMail(ArrayList<Contact> list) {
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getMail().toLowerCase().compareTo(c2.getMail().toLowerCase());
+                }
+            });
+            return list;
+        }
+
+        public static ArrayList<Contact> triParDateNaissance(ArrayList<Contact> list) {
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getDateNaissance().compareTo(c2.getDateNaissance());
+                }
+            });
+            return list;
+        }
+    }
+
 }
