@@ -1,3 +1,2 @@
-# JS_PhoneDirectory
+# JAVA_PhoneDirectory
 # Made by Samba , Jordan , Timéo
-# BILOU BILOU
