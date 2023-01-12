@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.util.Collections;
 
 import model.*;
 
@@ -37,6 +40,10 @@ public class App {
                     System.out.println("-- Recherche contact --");
                     rechercherParPrenom();
                     break;
+//              case "6":
+//                  System.out.println("-- afficher les contacts par ordre alphabétique --");
+//                  afficherMenuNP();
+//                  break;
                 case "q":
                     return;
                 default:
@@ -316,4 +323,23 @@ public class App {
             System.out.println("Pas de contact supprimer");
         }
     }
+    public static void afficherMenuNP(String[] args) {
+        ArrayList<String> contacts = new ArrayList<>();
+    
+        try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                contacts.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        Collections.sort(contacts);
+    
+        for (String contact : contacts) {
+            System.out.println(contact);
+        }
+        }
+    
 }
