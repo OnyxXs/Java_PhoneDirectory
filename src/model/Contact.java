@@ -8,11 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Contact {
     private static final String SEPARATEUR = ";";
@@ -21,7 +17,7 @@ public class Contact {
     private String prenom;
     private String mail;
     private String telephone;
-    private Date dateNaissance;
+    private String dateNaissance;
 
     public String getNom() {
         return nom;
@@ -43,57 +39,33 @@ public class Contact {
         return mail;
     }
 
-    public void setMail(String mail) throws ParseException {
-        Pattern pat = Pattern.compile("^[a-zA-Z0-9_.-]+@{1}[a-zA-Z0-9_.-]{2,}\\.[a-zA-Z.]{2,10}$");
-        Matcher matcher = pat.matcher(mail);
-        if (matcher.matches()) {
-            this.mail = mail;
-        } else {
-            ParseException e = new ParseException("Le format du mail est incorrect.", 0);
-            throw e;
-        }
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(String telephone) throws ParseException {
-        Pattern pat = Pattern.compile("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$");
-        Matcher matcher = pat.matcher(telephone);
-        if (matcher.matches()) {
-            this.telephone = telephone;
-        } else {
-            ParseException e = new ParseException("Le format du numéro est incorrect.", 0);
-            throw e;
-        }
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getDateNaissance() {
-        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-        return f.format(dateNaissance);
+        return dateNaissance;
     }
 
-    public void setDateNaissance(String dateNaissance) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        this.dateNaissance = format.parse(dateNaissance);
+    public void setDateNaissance(String dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 
     public void enregistrer() throws IOException {
-        /*
-         * PrintWriter pw = new PrintWriter(new BufferedWriter(new
-         * FileWriter("contacts.csv", true)));
-         * try {
-         * pw.println(this.toString());
-         * } finally {
-         * pw.close();
-         * }
-         */
-
-        try (PrintWriter pw2 = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
-            pw2.println(this.toString());
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
+        try {
+            pw.println(this.toString());
+        } finally {
+            pw.close();
         }
-
     }
 
     public static ArrayList<Contact> lister() throws FileNotFoundException, IOException, ParseException {
@@ -128,6 +100,26 @@ public class Contact {
         build.append(SEPARATEUR);
         build.append(this.getDateNaissance());
         return build.toString();
+    }
+
+    public void supprimer() throws IOException, ParseException {
+        ArrayList<Contact> contacts = lister();
+        for (Contact c : contacts) {
+            if (c.getNom().equals(this.nom) && c.getPrenom().equals(this.prenom) && c.getMail().equals(this.mail)
+                    && c.getTelephone().equals(this.telephone) && c.getDateNaissance().equals(this.dateNaissance)) {
+                contacts.remove(c);
+                break;
+            }
+        }
+
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv")));
+        try {
+            for (Contact c : contacts) {
+                pw.println(c.toString());
+            }
+        } finally {
+            pw.close();
+        }
     }
 
 }
