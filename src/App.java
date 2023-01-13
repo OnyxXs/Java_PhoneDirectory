@@ -8,7 +8,7 @@ import java.util.Comparator;
 //import com.googlecode.lanterna.gui2.*;
 //import com.googlecode.lanterna.TerminalSize;
 //import com.googlecode.lanterna.TextColor;
-//import model.*;
+import model.*;
 
 public class App {
 
