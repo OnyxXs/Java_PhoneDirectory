@@ -66,6 +66,15 @@ public class App {
                             System.out.println();
                             tri_Date();
                             break;
+                        case "5":
+                            System.out.println();
+                            System.out.println("\033[34mafficher les contacts par ordre alphabétique\033[0m");
+                            System.out.println();
+                        case "6":
+                            System.out.println();
+                            System.out.println("\033[34mafficher les contacts par ordre inrerséealphabétique\033[0m");
+                            System.out.println();
+                            tri_Prenominverse();
                         case "q":
                             break;
                         default:
@@ -104,6 +113,8 @@ public class App {
         System.out.println("1- Tri par nom");
         System.out.println("2- Tri par mail");
         System.out.println("3- Tri par date de naissance");
+        System.out.println("5- afficher les contacts par prénom");
+        System.out.println("6- afficher les contacts par prénom décroisants");
         System.out.println("q- Quitter");
         for (String tri_3 : tri) {
             System.out.println(tri_3);
@@ -446,5 +457,46 @@ public class App {
             return list;
         }
     }
+    private static void tri_Prenom() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getPrenom().toLowerCase().compareTo(c2.getPrenom().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(i + ": " + contact.getPrenom() + " " + contact.getNom());
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private static void tri_Prenominverse() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c2.getPrenom().toLowerCase().compareTo(c1.getPrenom().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(i + ": " + contact.getPrenom() + " " + contact.getNom());
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
 }
