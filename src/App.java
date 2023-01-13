@@ -50,17 +50,23 @@ public class App {
                     switch (tri) {
                         case "1":
                             System.out.println();
-                            System.out.println("\033[34mLISTE PAR NOM\033[0m");
+                            System.out.println("\033[34mLISTE PAR NOM CROISSANT\033[0m");
                             System.out.println();
                             tri_Nom();
                             break;
                         case "2":
                             System.out.println();
+                            System.out.println("\033[34mLISTE PAR NOM DECROISSANT\033[0m");
+                            System.out.println();
+                            tri_Nominverse();
+                            break;
+                        case "3":
+                            System.out.println();
                             System.out.println("\033[34mLISTE PAR MAIL\033[0m");
                             System.out.println();
                             tri_Mail();
                             break;
-                        case "3":
+                        case "4":
                             System.out.println();
                             System.out.println("\033[34mLISTE PAR DATE DE NAISSANCE\033[0m");
                             System.out.println();
@@ -68,13 +74,16 @@ public class App {
                             break;
                         case "5":
                             System.out.println();
-                            System.out.println("\033[34mafficher les contacts par ordre alphabétique\033[0m");
+                            System.out.println("\033[34mLISTE PAR PRENOM CROISSANT\033[0m");
                             System.out.println();
+                            tri_Prenom();
+                            break;
                         case "6":
                             System.out.println();
-                            System.out.println("\033[34mafficher les contacts par ordre inrerséealphabétique\033[0m");
+                            System.out.println("\033[34mLISTE PAR PRENOM DECROISSANT\033[0m");
                             System.out.println();
                             tri_Prenominverse();
+                            break;
                         case "q":
                             break;
                         default:
@@ -110,11 +119,12 @@ public class App {
         ArrayList<String> tri = new ArrayList<>();
         System.out.println("---- " + "\033[34mTrier contact \033[0m" + "----");
         System.out.println("differents types de tri");
-        System.out.println("1- Tri par nom");
-        System.out.println("2- Tri par mail");
-        System.out.println("3- Tri par date de naissance");
-        System.out.println("5- afficher les contacts par prénom");
-        System.out.println("6- afficher les contacts par prénom décroisants");
+        System.out.println("1- Tri par nom croissant");
+        System.out.println("2- Tri par nom décroissant");
+        System.out.println("3- Tri par mail");
+        System.out.println("4- Tri par date de naissance");
+        System.out.println("5- Tri par prénom croissant");
+        System.out.println("6- Tri par prénom décroissant");
         System.out.println("q- Quitter");
         for (String tri_3 : tri) {
             System.out.println(tri_3);
@@ -383,6 +393,27 @@ public class App {
         }
     }
 
+    private static void tri_Nominverse() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c2.getNom().toLowerCase().compareTo(c1.getNom().toLowerCase());
+                }
+            });
+
+            int i = 1;
+            for (Contact contact : list) {
+                System.out.println(i + ": " + contact.getNom() + " " + contact.getPrenom());
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private static void tri_Mail() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -457,6 +488,7 @@ public class App {
             return list;
         }
     }
+
     private static void tri_Prenom() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -477,6 +509,7 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
+
     private static void tri_Prenominverse() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -497,6 +530,4 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
-
-
 }
