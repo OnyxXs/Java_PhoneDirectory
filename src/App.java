@@ -103,6 +103,17 @@ public class App {
         }
     }
 
+/**
+
+Cette méthode affiche les options du menu disponibles pour l'utilisateur.
+1) Ajouter un contact
+2) Liste des contacts
+3) Modifier un contact
+4) Supprimer un contact
+5) Rechercher un contact
+6) Trier les contacts
+q) Quitter
+*/
     public static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-------- " + "\033[34mMenu \033[0m" + "---------");
@@ -117,6 +128,17 @@ public class App {
             System.out.println(menu);
         }
     }
+
+    /**
+Cette méthode affiche les options de tri disponibles pour l'utilisateur.
+1) Tri par nom croissant
+2) Tri par nom décroissant
+3) Tri par mail
+4) Tri par date de naissance
+5) Tri par prénom croissant
+6) Tri par prénom décroissant
+q) Quitter
+*/
 
     public static void tri_contact() {
         ArrayList<String> tri = new ArrayList<>();
@@ -134,6 +156,13 @@ public class App {
         }
     }
 
+/**
+
+Cette méthode permet à l'utilisateur de rechercher un contact en saisissant son prénom.
+Sa utilise la méthode "lister()" pour récupérer la liste des contacts et filtre la liste en ne gardant que les contacts dont le prénom commence par le prénom recherché.
+Elle affiche ensuite les informations des contacts correspondants.
+Si aucun contact n'est trouvé un message d'erreur est affiché.
+*/
     private static void rechercherParPrenom() {
         System.out.print("Prénom : ");
         String prenomRecherche = scanner.nextLine();
@@ -160,6 +189,12 @@ public class App {
         }
     }
 
+/**
+Cette méthode utilise la méthode "lister()" pour récupérer la liste des contacts enregistrés.
+Elle affiche les noms et prénoms de chaque contact
+Si une exception appariat un message d'erreur est affiché.
+*/
+
     private static void listerContacts() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -174,6 +209,13 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
+
+
+/**
+Cette méthode permet d'ajouter un nouveau contact en demandant à l'utilisateur de saisir les informations
+nécessaires (nom, prénom, mail, téléphone, date de naissance) en vérifiant leur validité à l'aide des regex (isValidEmail, isValidPhone, isValidDate). 
+ Si toutes les informations sont valides, le contact est enregistré en utilisant la méthode enregistrer() de la classe Contact. Si une exception est est detecter un message d'erreur s'affiche.
+*/
 
     private static void add_contact() throws IOException {
         Contact c = new Contact();
@@ -262,6 +304,17 @@ public class App {
         return !name.isBlank();
     }
 
+    /**
+Méthode pour mettre à jour un contact existant.
+
+Utilise la méthode "lister()" de la classe Contact pour obtenir la liste des contacts,et demande à l'utilisateur de choisir un contact à modifier en affichant la liste des contacts.
+
+Utilise des regex pour vérifier la validité des entrées de l'utilisateur pour les champs mail, numéro de téléphone et date de naissance.
+
+Utilise la méthode "supprimer()" de la classe Contact pour supprimer le contact sélectionné, puis utilise les méthodes "set" pour mettre à jour les champs du contact et utilise la méthode "enregistrer()" pour enregistrer les modifications.
+
+Gère les exceptions en affichant un message d'erreur si aucun contact n'a été modifié.
+*/
     private static void update_contact() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -349,6 +402,10 @@ public class App {
         }
     }
 
+    /**
+ * Permet de supprimer un contact de la liste
+ */
+
     private static void supp_contact() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -375,6 +432,16 @@ public class App {
         }
     }
 
+    /**
+
+Méthode pour trier les contacts par nom.
+
+Utilise la méthode "lister()" de la classe Contact pour obtenir la liste des contacts, utilise la méthode "Collections.sort()" pour trier la liste en utilisant un comparateur qui compare les noms des contacts
+
+Affiche ensuite chaque contact trié par nom.
+
+Gère les exceptions
+*/
     private static void tri_Nom() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -438,6 +505,9 @@ public class App {
         }
     }
 
+    /**
+ * Tri la liste des contacts par date de naissance
+ */
     private static void tri_Date() {
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -459,8 +529,15 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
-
+/**
+* contient des méthodes pour trier une liste de contacts avec différents critères
+*/
     public class Compare {
+        /**
+    * Tri la liste de contacts passée en paramètre par ordre alphabétique de nom
+    * @param list la liste de contacts à trier
+    * @return la liste de contacts triée
+    */
         public static ArrayList<Contact> triParNom(ArrayList<Contact> list) {
             Collections.sort(list, new Comparator<Contact>() {
                 @Override
@@ -472,6 +549,10 @@ public class App {
         }
 
         public static ArrayList<Contact> triParMail(ArrayList<Contact> list) {
+            /**
+            * Utilise un comparateur pour trier la liste en comparant les noms des contacts
+            * en utilisant la méthode compareTo() 
+            */
             Collections.sort(list, new Comparator<Contact>() {
                 @Override
                 public int compare(Contact c1, Contact c2) {
@@ -482,6 +563,10 @@ public class App {
         }
 
         public static ArrayList<Contact> triParDateNaissance(ArrayList<Contact> list) {
+            /**
+            * Utilise un comparateur pour trier la liste en comparant les dates de naissance des contacts
+            * en utilisant la méthode compareTo()
+            */
             Collections.sort(list, new Comparator<Contact>() {
                 @Override
                 public int compare(Contact c1, Contact c2) {
@@ -492,10 +577,17 @@ public class App {
         }
     }
 
+/**
+* Tri la liste des contacts par ordre alphabétique de prénom.
+*/
+
     private static void tri_Prenom() {
         try {
             ArrayList<Contact> list = Contact.lister();
-
+            /**
+            * Utilise un comparateur pour trier la liste en comparant les prénoms des contacts
+            * en utilisant la méthode compareTo() et en les convertissant en minuscule
+            */
             Collections.sort(list, new Comparator<Contact>() {
                 @Override
                 public int compare(Contact c1, Contact c2) {
@@ -504,15 +596,26 @@ public class App {
             });
 
             int i = 1;
+             /**
+            * Affiche chaque contact trié par ordre alphabétique
+            */
             for (Contact contact : list) {
                 System.out.println(i + ": " + contact.getPrenom() + " " + contact.getNom());
                 i++;
             }
         } catch (Exception e) {
+            /**
+            * Affiche le message d'erreur si une exception est detecter
+            */
             System.out.println(e.getMessage());
         }
     }
 
+    /**
+Cette fonction permet de trier les contacts par ordre décroissant. Elle utilise la méthode "lister()" pour récupérer les contacts stockés dans le fichier csv. 
+Elle utilise Comparator pour comparer les prénoms des contacts et les trier dans l'ordre inverse. 
+Elle affiche également la liste des contacts triés avec leur prénom et nom.
+*/
     private static void tri_Prenominverse() {
         try {
             ArrayList<Contact> list = Contact.lister();
